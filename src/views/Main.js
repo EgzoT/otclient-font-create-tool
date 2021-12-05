@@ -15,6 +15,7 @@ class Main extends React.Component {
 
         this.state = {
             fontFamily: false,
+            fontName: "Default",
             fontSize: 15,
             signWidth: 25,
             signHeight: 25
@@ -22,12 +23,16 @@ class Main extends React.Component {
     }
 
     onFontChange = async (files) => {
-        const data = await files[0].arrayBuffer();
-        let font = new FontFace('added-font', data);
-        await font.load();
-        document.fonts.add(font);
+        if (files[0]) {
+            const data = await files[0].arrayBuffer();
+            const fontName = files[0].name;
 
-        this.setState({ fontFamily: 'added-font' });
+            let font = new FontFace('added-font', data);
+            await font.load();
+            document.fonts.add(font);
+
+            this.setState({ fontFamily: 'added-font', fontName: fontName });
+        }
     }
 
     download = () => {
@@ -77,6 +82,12 @@ class Main extends React.Component {
                         onClick={ this.download }
                     />
                 </div>
+
+                <br/>
+
+                Font name: { this.state.fontName }
+
+                <br/>
 
                 Font size:
                 <input type="number" style={{ width: 100, marginTop: 10, marginLeft: 5 }} value={ this.state.fontSize } onChange={ this.onChangeFontSize } />

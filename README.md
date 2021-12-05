@@ -2,6 +2,12 @@
 
 Application for creating fonts for OTClient
 
+## Get repository
+
+```
+git clone --recursive <url>
+```
+
 # Help
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

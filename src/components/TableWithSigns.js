@@ -40,9 +40,6 @@ class TableWithSigns extends React.Component {
 
         this.signs = cp1250;
 
-        //TODO:           // Font size
-        this.width = 25;  // Letter width
-        this.height = 25; // Letter height
         //TODO:           // Antialias ?!? https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth
         //TODO:           // Text color
 
