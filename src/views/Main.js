@@ -18,7 +18,8 @@ class Main extends React.Component {
             fontName: "Default",
             fontSize: 15,
             signWidth: 25,
-            signHeight: 25
+            signHeight: 25,
+            fontWeight: 400
         }
     }
 
@@ -62,6 +63,10 @@ class Main extends React.Component {
         this.setState({ signHeight: Number(e.target.value) });
     }
 
+    onChangeFontWeight = (e) => {
+        this.setState({ fontWeight: Number(e.target.value) });
+    }
+
     render() {
         return (
             <div>
@@ -90,17 +95,48 @@ class Main extends React.Component {
                 <br/>
 
                 Font size:
-                <input type="number" style={{ width: 100, marginTop: 10, marginLeft: 5 }} value={ this.state.fontSize } onChange={ this.onChangeFontSize } />
+                <input
+                    type="number"
+                    style={{ width: 100, marginTop: 10, marginLeft: 5 }}
+                    value={ this.state.fontSize }
+                    min={ 1 }
+                    onChange={ this.onChangeFontSize }
+                />
 
                 <br/>
 
                 Sign width:
-                <input type="number" style={{ width: 100, marginTop: 10, marginLeft: 5 }} value={ this.state.signWidth } onChange={ this.onChangeSignWidth } />
+                <input
+                    type="number"
+                    style={{ width: 100, marginTop: 10, marginLeft: 5 }}
+                    value={ this.state.signWidth }
+                    min={ 1 }
+                    onChange={ this.onChangeSignWidth }
+                />
 
                 <br/>
 
                 Sign height:
-                <input type="number" style={{ width: 100, marginTop: 10, marginLeft: 5 }} value={ this.state.signHeight } onChange={ this.onChangeSignHeight } />
+                <input
+                    type="number"
+                    style={{ width: 100, marginTop: 10, marginLeft: 5 }}
+                    value={ this.state.signHeight }
+                    min={ 1 }
+                    onChange={ this.onChangeSignHeight }
+                />
+
+                <br/>
+
+                Font weight:
+                <input
+                    type="number"
+                    style={{ width: 100, marginTop: 10, marginLeft: 5 }}
+                    value={ this.state.fontWeight }
+                    step={ 100 }
+                    min={ 100 }
+                    max={ 900 }
+                    onChange={ this.onChangeFontWeight }
+                />
 
                 <p id="test" style={{ fontSize: '1.8rem', fontFamily: this.state.fontFamily ? this.state.fontFamily : null }}>Upload a font to change me!</p>
 
@@ -109,6 +145,7 @@ class Main extends React.Component {
                     fontSize={ this.state.fontSize }
                     signWidth={ this.state.signWidth }
                     signHeight={ this.state.signHeight }
+                    fontWeight={ this.state.fontWeight }
                     divRef={ this.ref }
                 />
             </div>

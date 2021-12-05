@@ -46,7 +46,7 @@ class TableWithSigns extends React.Component {
         this.state = {}
     }
 
-    getRows = (fontFamily, fontSize, signWidth, signHeight) => {
+    getRows = (fontFamily, fontSize, signWidth, signHeight, fontWeight) => {
         let rows = [];
 
         for(let i in this.signs) {
@@ -57,6 +57,7 @@ class TableWithSigns extends React.Component {
                     height={ signHeight }
                     fontFamily={ fontFamily }
                     fontSize={ fontSize }
+                    fontWeight={ fontWeight }
                 />
             );
         }
@@ -67,7 +68,7 @@ class TableWithSigns extends React.Component {
     render() {
         return (
             <div ref={ this.props.divRef } style={{ display: "table", borderSpacing: 0, position: "relative" }}>
-                { this.getRows(this.props.fontFamily, this.props.fontSize, this.props.signWidth, this.props.signHeight) }
+                { this.getRows(this.props.fontFamily, this.props.fontSize, this.props.signWidth, this.props.signHeight, this.props.fontWeight) }
             </div>
         );
     }
@@ -80,7 +81,7 @@ class RowSigns extends React.Component {
         this.state = {}
     }
 
-    getCells = (fontFamily, fontSize) => {
+    getCells = (fontFamily, fontSize, fontWeight) => {
         let cells = [];
 
         for (let i in this.props.row) {
@@ -91,6 +92,7 @@ class RowSigns extends React.Component {
                     height={ this.props.height }
                     fontFamily={ fontFamily }
                     fontSize={ fontSize }
+                    fontWeight={ fontWeight }
                 />
             );
         }
@@ -110,7 +112,7 @@ class RowSigns extends React.Component {
                 border: 0,
                 overflow: "hidden"
             }}>
-                { this.getCells(this.props.fontFamily, this.props.fontSize) }
+                { this.getCells(this.props.fontFamily, this.props.fontSize, this.props.fontWeight) }
             </div>
         );
     }
@@ -128,6 +130,7 @@ class CellSign extends React.Component {
             <div style={{
                 fontFamily: this.props.fontFamily ? this.props.fontFamily : null,
                 fontSize: this.props.fontSize,
+                fontWeight: this.props.fontWeight,
                 display: "table-cell",
                 width: this.props.width,
                 maxWidth: this.props.width,
