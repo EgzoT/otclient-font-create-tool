@@ -6,6 +6,8 @@ import IconFA from '../components/CircleAnimationButton-react/IconFA';
 import { faFileImage, faFileDownload } from "@fortawesome/free-solid-svg-icons";
 import TableWithSigns from '../components/TableWithSigns';
 import { toPng } from 'html-to-image';
+import Select from 'react-select';
+import { charsetOptions } from '../components/consts';
 
 class Main extends React.Component {
     constructor(props) {
@@ -19,7 +21,8 @@ class Main extends React.Component {
             fontSize: 15,
             signWidth: 25,
             signHeight: 25,
-            fontWeight: 400
+            fontWeight: 400,
+            charset: charsetOptions[0]
         }
     }
 
@@ -65,6 +68,10 @@ class Main extends React.Component {
 
     onChangeFontWeight = (e) => {
         this.setState({ fontWeight: Number(e.target.value) });
+    }
+
+    onChangeCharset = (e) => {
+        this.setState({ charset: e });
     }
 
     render() {
@@ -138,6 +145,23 @@ class Main extends React.Component {
                     onChange={ this.onChangeFontWeight }
                 />
 
+                <br/>
+
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                    <div style={{ marginRight: 10 }}>Charset:</div>
+                    <Select
+                        value={ this.state.charset }
+                        onChange={ this.onChangeCharset }
+                        options={ charsetOptions }
+                        styles={{
+                            container: (provided, state) => ({ ...provided, width: 130, height: 30 }),
+                            option: (provided, state) => ({ ...provided, color: '#000000' }),
+                            control: (provided, state) => ({ ...provided, minHeight: 20 }),
+                            indicatorsContainer: (provided, state) => ({ ...provided, height: 30 })
+                        }}
+                    />
+                </div>
+
                 <p id="test" style={{ fontSize: '1.8rem', fontFamily: this.state.fontFamily ? this.state.fontFamily : null }}>Upload a font to change me!</p>
 
                 <TableWithSigns
@@ -146,6 +170,7 @@ class Main extends React.Component {
                     signWidth={ this.state.signWidth }
                     signHeight={ this.state.signHeight }
                     fontWeight={ this.state.fontWeight }
+                    charset={ this.state.charset.value }
                     divRef={ this.ref }
                 />
             </div>
