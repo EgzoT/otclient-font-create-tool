@@ -8,12 +8,14 @@ import TableWithSigns from '../components/TableWithSigns';
 import { toPng } from 'html-to-image';
 import Select from 'react-select';
 import { charsetOptions } from '../data/consts';
+import TestHeight from '../components/TestHeight';
 
 class Main extends React.Component {
     constructor(props) {
         super(props);
 
         this.ref = React.createRef();
+        this.testSignRef = React.createRef();
 
         this.state = {
             fontFamily: false,
@@ -39,6 +41,10 @@ class Main extends React.Component {
         }
     }
 
+    getMinSignHeight = () => {
+        return this.testSignRef.current.getHeight();
+    }
+
     download = () => {
         if (this.ref.current === null) {
             return;
@@ -58,7 +64,7 @@ class Main extends React.Component {
         let text = "Font"
             + "\n  name: " + "otc_font"
             + "\n  texture: " + "otc_font"
-            + "\n  height: " + this.state.fontSize
+            + "\n  height: " + this.getMinSignHeight()
             + "\n  glyph-size: " + this.state.signWidth + " " + this.state.signHeight
             + "\n  space-width: " + 3
             + "\n";
@@ -93,14 +99,14 @@ class Main extends React.Component {
     render() {
         return (
             <div>
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
                     <InputFile
                         text={ "Load font" }
                         accept={ ".ttf" }
                         icon={ faFileUpload }
                         onChange={ e => this.onFontChange(e.target.files) }
                         width={ 120 }
-                        style={{ marginRight: 10 }}
+                        style={{ marginTop: 5, marginBottom: 5, marginRight: 5 }}
                     />
                 </div>
 
@@ -171,25 +177,23 @@ class Main extends React.Component {
                     />
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'center', marginTop: 25 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', marginTop: 25 }}>
                     <CircleAnimationButton
                         icon={ <IconFA icon={ faFileImage }/> }
                         text={ "Download font image" }
                         width={ 200 }
-                        style={{ marginRight: 10 }}
+                        style={{ marginTop: 5, marginBottom: 5, marginRight: 5 }}
                         onClick={ this.download }
                     />
                     <CircleAnimationButton
                         icon={ <IconFA icon={ faFileCode }/> }
                         text={ "Download otfont file" }
                         width={ 200 }
-                        style={{ marginRight: 10 }}
                         color="springForest"
+                        style={{ marginTop: 5, marginBottom: 5, marginRight: 5 }}
                         onClick={ this.generateOtfontFile }
                     />
                 </div>
-
-                <p id="test" style={{ fontSize: '1.8rem', fontFamily: this.state.fontFamily ? this.state.fontFamily : null }}>Upload a font to change me!</p>
 
                 <div style={{ width: 'fit-content', margin: 'auto' }}>
                     <TableWithSigns
@@ -202,6 +206,20 @@ class Main extends React.Component {
                         divRef={ this.ref }
                     />
                 </div>
+
+                <div style={{ marginTop: 10 }}>
+                    Trying to calculate the minimum sign height
+                </div>
+
+                <TestHeight
+                    fontFamily={ this.state.fontFamily }
+                    fontSize={ this.state.fontSize }
+                    signWidth={ this.state.signWidth }
+                    signHeight={ this.state.signHeight }
+                    fontWeight={ this.state.fontWeight }
+                    style={{ margin: 'auto', width: 'fit-content' }}
+                    ref={ this.testSignRef }
+                />
             </div>
         );
     }
