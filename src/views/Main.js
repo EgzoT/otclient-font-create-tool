@@ -1,13 +1,13 @@
 import React from 'react';
 
 import InputFile from '../components/InputFile';
-import CircleAnimationButtonSuccess from '../components/CircleAnimationButton-react/CircleAnimationButton';
+import CircleAnimationButton from '../components/CircleAnimationButton-react/CircleAnimationButton';
 import IconFA from '../components/CircleAnimationButton-react/IconFA';
-import { faFileImage, faFileDownload } from "@fortawesome/free-solid-svg-icons";
+import { faFileUpload, faFileImage, faFileCode } from "@fortawesome/free-solid-svg-icons";
 import TableWithSigns from '../components/TableWithSigns';
 import { toPng } from 'html-to-image';
 import Select from 'react-select';
-import { charsetOptions } from '../components/consts';
+import { charsetOptions } from '../data/consts';
 
 class Main extends React.Component {
     constructor(props) {
@@ -18,9 +18,9 @@ class Main extends React.Component {
         this.state = {
             fontFamily: false,
             fontName: "Default",
-            fontSize: 15,
-            signWidth: 25,
-            signHeight: 25,
+            fontSize: 11,
+            signWidth: 16,
+            signHeight: 16,
             fontWeight: 400,
             charset: charsetOptions[0]
         }
@@ -54,6 +54,22 @@ class Main extends React.Component {
         });
     }
 
+    generateOtfontFile = () => {
+        let text = "Font"
+            + "\n  name: " + "otc_font"
+            + "\n  texture: " + "otc_font"
+            + "\n  height: " + this.state.fontSize
+            + "\n  glyph-size: " + this.state.signWidth + " " + this.state.signHeight
+            + "\n  space-width: " + 3
+            + "\n";
+
+        let a = document.createElement('a');
+        a.href = "data:application/octet-stream;charset=utf-8;base64," + window.btoa(unescape(encodeURIComponent(text)));
+        a.textContent = 'download';
+        a.download = "otc_font" + ".otfont";
+        a.click();
+    }
+
     onChangeFontSize = (e) => {
         this.setState({ fontSize: Number(e.target.value) });
     }
@@ -81,17 +97,10 @@ class Main extends React.Component {
                     <InputFile
                         text={ "Load font" }
                         accept={ ".ttf" }
-                        icon={ faFileImage }
+                        icon={ faFileUpload }
                         onChange={ e => this.onFontChange(e.target.files) }
                         width={ 120 }
                         style={{ marginRight: 10 }}
-                    />
-                    <CircleAnimationButtonSuccess
-                        icon={ <IconFA icon={ faFileDownload }/> }
-                        text={ "Download" }
-                        width={ 120 }
-                        style={{ marginRight: 10 }}
-                        onClick={ this.download }
                     />
                 </div>
 
@@ -162,17 +171,37 @@ class Main extends React.Component {
                     />
                 </div>
 
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: 25 }}>
+                    <CircleAnimationButton
+                        icon={ <IconFA icon={ faFileImage }/> }
+                        text={ "Download font image" }
+                        width={ 200 }
+                        style={{ marginRight: 10 }}
+                        onClick={ this.download }
+                    />
+                    <CircleAnimationButton
+                        icon={ <IconFA icon={ faFileCode }/> }
+                        text={ "Download otfont file" }
+                        width={ 200 }
+                        style={{ marginRight: 10 }}
+                        color="springForest"
+                        onClick={ this.generateOtfontFile }
+                    />
+                </div>
+
                 <p id="test" style={{ fontSize: '1.8rem', fontFamily: this.state.fontFamily ? this.state.fontFamily : null }}>Upload a font to change me!</p>
 
-                <TableWithSigns
-                    fontFamily={ this.state.fontFamily }
-                    fontSize={ this.state.fontSize }
-                    signWidth={ this.state.signWidth }
-                    signHeight={ this.state.signHeight }
-                    fontWeight={ this.state.fontWeight }
-                    charset={ this.state.charset.value }
-                    divRef={ this.ref }
-                />
+                <div style={{ width: 'fit-content', margin: 'auto' }}>
+                    <TableWithSigns
+                        fontFamily={ this.state.fontFamily }
+                        fontSize={ this.state.fontSize }
+                        signWidth={ this.state.signWidth }
+                        signHeight={ this.state.signHeight }
+                        fontWeight={ this.state.fontWeight }
+                        charset={ this.state.charset.value }
+                        divRef={ this.ref }
+                    />
+                </div>
             </div>
         );
     }
