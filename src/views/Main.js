@@ -25,7 +25,8 @@ class Main extends React.Component {
             signHeight: 16,
             signHeightError: false,
             fontWeight: 400,
-            charset: charsetOptions[0]
+            charset: charsetOptions[0],
+            spaceWidth: 3
         }
     }
 
@@ -67,7 +68,7 @@ class Main extends React.Component {
             + "\n  texture: " + "otc_font"
             + "\n  height: " + this.getMinSignHeight()
             + "\n  glyph-size: " + this.state.signWidth + " " + this.state.signHeight
-            + "\n  space-width: " + 3
+            + "\n  space-width: " + this.state.spaceWidth
             + "\n";
 
         let a = document.createElement('a');
@@ -108,6 +109,10 @@ class Main extends React.Component {
 
     onChangeCharset = (e) => {
         this.setState({ charset: e });
+    }
+
+    onChangeSpaceWidth = (e) => {
+        this.setState({ spaceWidth: Number(e.target.value) });
     }
 
     render() {
@@ -192,6 +197,17 @@ class Main extends React.Component {
                     />
                 </div>
 
+                Space width:
+                <input
+                    type="number"
+                    style={{ width: 100, marginTop: 10, marginLeft: 5 }}
+                    value={ this.state.spaceWidth }
+                    min={ 1 }
+                    onChange={ this.onChangeSpaceWidth }
+                />
+
+                <br/>
+
                 <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', marginTop: 25 }}>
                     <CircleAnimationButton
                         icon={ <IconFA icon={ faFileImage }/> }
@@ -219,7 +235,6 @@ class Main extends React.Component {
                         fontWeight={ this.state.fontWeight }
                         charset={ this.state.charset.value }
                         divRef={ this.ref }
-                        signsRefs={ this.signsRefs }
                     />
                 </div>
 
