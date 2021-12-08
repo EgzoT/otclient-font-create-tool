@@ -10,7 +10,7 @@ class CellSign extends React.Component {
     render() {
         return (
             <div
-                style={{...{
+                style={{ ...{
                     fontFamily: this.props.fontFamily ? this.props.fontFamily : null,
                     fontSize: this.props.fontSize,
                     fontWeight: this.props.fontWeight,

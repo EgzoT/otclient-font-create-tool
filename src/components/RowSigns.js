@@ -15,6 +15,7 @@ class RowSigns extends React.Component {
         for (let i in this.props.row) {
             cells.push(
                 <CellSign
+                    key={ i }
                     sign={ String.fromCharCode(this.props.row[i]) }
                     width={ this.props.width }
                     height={ this.props.height }

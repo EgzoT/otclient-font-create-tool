@@ -23,6 +23,7 @@ class Main extends React.Component {
             fontSize: 11,
             signWidth: 16,
             signHeight: 16,
+            signHeightError: false,
             fontWeight: 400,
             charset: charsetOptions[0]
         }
@@ -78,6 +79,15 @@ class Main extends React.Component {
 
     onChangeFontSize = (e) => {
         this.setState({ fontSize: Number(e.target.value) });
+
+        // This action run before UI change, so data from getMinSignHeight is out of date, need to delay checking action
+        setTimeout(() => {
+            if (this.getMinSignHeight() <= this.state.signHeight) {
+                this.setState({ signHeightError: false });
+            } else {
+                this.setState({ signHeightError: true });
+            }
+        }, 100);
     }
 
     onChangeSignWidth = (e) => {
@@ -85,7 +95,11 @@ class Main extends React.Component {
     }
 
     onChangeSignHeight = (e) => {
-        this.setState({ signHeight: Number(e.target.value) });
+        if (this.getMinSignHeight() <= Number(e.target.value)) {
+            this.setState({ signHeight: Number(e.target.value), signHeightError: false });
+        } else {
+            this.setState({ signHeight: Number(e.target.value), signHeightError: true });
+        }
     }
 
     onChangeFontWeight = (e) => {
@@ -141,11 +155,12 @@ class Main extends React.Component {
                 Sign height:
                 <input
                     type="number"
-                    style={{ width: 100, marginTop: 10, marginLeft: 5 }}
+                    style={{ width: 100, marginTop: 10, marginLeft: 5, backgroundColor: this.state.signHeightError ? '#FF3366' : '#FFFFFF' }}
                     value={ this.state.signHeight }
                     min={ 1 }
                     onChange={ this.onChangeSignHeight }
                 />
+                { this.state.signHeightError ? <div style={{ color: '#FF3366' }}>Real sign height is greater than the set height</div> : null }
 
                 <br/>
 
@@ -204,6 +219,7 @@ class Main extends React.Component {
                         fontWeight={ this.state.fontWeight }
                         charset={ this.state.charset.value }
                         divRef={ this.ref }
+                        signsRefs={ this.signsRefs }
                     />
                 </div>
 

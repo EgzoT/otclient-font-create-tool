@@ -18,6 +18,7 @@ class TableWithSigns extends React.Component {
         for(let i in charset) {
             rows.push(
                 <RowSigns
+                    key={ i }
                     row={ charset[i] }
                     width={ signWidth }
                     height={ signHeight }
