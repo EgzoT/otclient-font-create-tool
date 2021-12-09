@@ -3,7 +3,7 @@ import React from 'react';
 import InputFile from '../components/InputFile';
 import CircleAnimationButton from '../components/CircleAnimationButton-react/CircleAnimationButton';
 import IconFA from '../components/CircleAnimationButton-react/IconFA';
-import { faFileUpload, faFileImage, faFileCode } from "@fortawesome/free-solid-svg-icons";
+import { faFileUpload, faFileImage, faFileCode, faBroom } from "@fortawesome/free-solid-svg-icons";
 import TableWithSigns from '../components/TableWithSigns';
 import { toPng } from 'html-to-image';
 import Select from 'react-select';
@@ -18,8 +18,8 @@ class Main extends React.Component {
         this.testSignRef = React.createRef();
 
         this.state = {
-            fontFamily: false,
-            fontName: "Default",
+            fontsList: [],
+            fontName: false,
             fontSize: 11,
             signWidth: 16,
             signHeight: 16,
@@ -30,17 +30,49 @@ class Main extends React.Component {
         }
     }
 
-    onFontChange = async (files) => {
+    componentDidMount() {
+        this.refreshFontList();
+    }
+
+    addFont = async (e) => {
+        let files = e.target.files;
+
         if (files[0]) {
-            const data = await files[0].arrayBuffer();
-            const fontName = files[0].name;
+            let fontName = "ERROR";
 
-            let font = new FontFace('added-font', data);
-            await font.load();
-            document.fonts.add(font);
+            for (let i = 0; i < files.length; i++) {
+                const data = await files[i].arrayBuffer();
+                fontName = files[i].name.replace(".ttf", "");
 
-            this.setState({ fontFamily: 'added-font', fontName: fontName });
+                let font = new FontFace(fontName, data);
+                await font.load();
+                document.fonts.add(font);
+            }
+
+            this.setState({ fontName: fontName });
+
+            this.refreshFontList();
         }
+
+        // Clear input file value to prevent block onChange event when select same elements
+        e.target.value = "";
+    }
+
+    refreshFontList = () => {
+        let fonts = [];
+
+        for (let value of document.fonts.keys()) {
+            fonts.push({ value: value.family, label: value.family });
+        }
+
+        this.setState({ fontsList: fonts });
+    }
+
+    clearAllAddedFonts = () => {
+        document.fonts.clear();
+        this.refreshFontList();
+
+        this.setState({ fontName: false });
     }
 
     getMinSignHeight = () => {
@@ -76,6 +108,12 @@ class Main extends React.Component {
         a.textContent = 'download';
         a.download = "otc_font" + ".otfont";
         a.click();
+    }
+
+    // onChange
+
+    onChangeFont = (e) => {
+        this.setState({ fontName: e.value });
     }
 
     onChangeFontSize = (e) => {
@@ -122,16 +160,38 @@ class Main extends React.Component {
                     <InputFile
                         text={ "Load font" }
                         accept={ ".ttf" }
+                        multiple={ true }
                         icon={ faFileUpload }
-                        onChange={ e => this.onFontChange(e.target.files) }
+                        onChange={ e => this.addFont(e) }
                         width={ 120 }
                         style={{ marginTop: 5, marginBottom: 5, marginRight: 5 }}
+                    />
+                    <CircleAnimationButton
+                        icon={ <IconFA icon={ faBroom }/> }
+                        text={ "Delete added fonts" }
+                        width={ 190 }
+                        color="steelPurple"
+                        style={{ marginTop: 5, marginBottom: 5, marginRight: 5 }}
+                        onClick={ this.clearAllAddedFonts }
                     />
                 </div>
 
                 <br/>
 
-                Font name: { this.state.fontName }
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                    <div style={{ marginRight: 10 }}>Font:</div>
+                    <Select
+                        value={ this.state.fontName ? { value: this.state.fontName, label: this.state.fontName } : null }
+                        onChange={ this.onChangeFont }
+                        options={ this.state.fontsList }
+                        styles={{
+                            container: (provided, state) => ({ ...provided, width: 300, height: 30 }),
+                            option: (provided, state) => ({ ...provided, color: '#000000' }),
+                            control: (provided, state) => ({ ...provided, minHeight: 20 }),
+                            indicatorsContainer: (provided, state) => ({ ...provided, height: 30 })
+                        }}
+                    />
+                </div>
 
                 <br/>
 
@@ -228,7 +288,7 @@ class Main extends React.Component {
 
                 <div style={{ width: 'fit-content', margin: 'auto' }}>
                     <TableWithSigns
-                        fontFamily={ this.state.fontFamily }
+                        fontFamily={ this.state.fontName }
                         fontSize={ this.state.fontSize }
                         signWidth={ this.state.signWidth }
                         signHeight={ this.state.signHeight }
@@ -243,7 +303,7 @@ class Main extends React.Component {
                 </div>
 
                 <TestHeight
-                    fontFamily={ this.state.fontFamily }
+                    fontFamily={ this.state.fontName }
                     fontSize={ this.state.fontSize }
                     signWidth={ this.state.signWidth }
                     signHeight={ this.state.signHeight }

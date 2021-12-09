@@ -53,6 +53,7 @@ class InputFile extends React.Component {
                 <input
                     type={ "file" }
                     accept={ this.props.accept }
+                    multiple={ this.props.multiple }
                     ref={ this.inputFileRef }
                     onChange={ this.props.onChange }
                     style={{ display: 'none' }}
