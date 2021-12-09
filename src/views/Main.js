@@ -3,7 +3,7 @@ import React from 'react';
 import InputFile from '../components/InputFile';
 import CircleAnimationButton from '../components/CircleAnimationButton-react/CircleAnimationButton';
 import IconFA from '../components/CircleAnimationButton-react/IconFA';
-import { faFileUpload, faFileImage, faFileCode, faBroom } from "@fortawesome/free-solid-svg-icons";
+import { faFileUpload, faFileImage, faFileCode, faBroom, faFolderPlus } from "@fortawesome/free-solid-svg-icons";
 import TableWithSigns from '../components/TableWithSigns';
 import { toPng } from 'html-to-image';
 import Select from 'react-select';
@@ -41,12 +41,14 @@ class Main extends React.Component {
             let fontName = "ERROR";
 
             for (let i = 0; i < files.length; i++) {
-                const data = await files[i].arrayBuffer();
-                fontName = files[i].name.replace(".ttf", "");
+                if (files[i].name.substr(files[i].name.length - 4) === '.ttf') {
+                    const data = await files[i].arrayBuffer();
+                    fontName = files[i].name.replace(".ttf", "");
 
-                let font = new FontFace(fontName, data);
-                await font.load();
-                document.fonts.add(font);
+                    let font = new FontFace(fontName, data);
+                    await font.load();
+                    document.fonts.add(font);
+                }
             }
 
             this.setState({ fontName: fontName });
@@ -164,6 +166,15 @@ class Main extends React.Component {
                         icon={ faFileUpload }
                         onChange={ e => this.addFont(e) }
                         width={ 120 }
+                        style={{ marginTop: 5, marginBottom: 5, marginRight: 5 }}
+                    />
+                    <InputFile
+                        text={ "Load font from folder" }
+                        multiple={ true }
+                        directory={ true }
+                        icon={ faFolderPlus }
+                        onChange={ e => this.addFont(e) }
+                        width={ 210 }
                         style={{ marginTop: 5, marginBottom: 5, marginRight: 5 }}
                     />
                     <CircleAnimationButton
