@@ -18,7 +18,7 @@ class Main extends React.Component {
         this.testSignRef = React.createRef();
 
         this.state = {
-            fontsList: [],
+            fontsList: {},
             fontName: false,
             fontSize: 11,
             signWidth: 16,
@@ -45,6 +45,11 @@ class Main extends React.Component {
                     const data = await files[i].arrayBuffer();
                     fontName = files[i].name.replace(".ttf", "");
 
+                    // When a font with the same name is exists delete it, before add new
+                    if (this.state.fontsList[fontName]) {
+                        document.fonts.delete(this.state.fontsList[fontName]);
+                    }
+
                     let font = new FontFace(fontName, data);
                     await font.load();
                     document.fonts.add(font);
@@ -61,13 +66,23 @@ class Main extends React.Component {
     }
 
     refreshFontList = () => {
-        let fonts = [];
+        let fonts = {};
 
         for (let value of document.fonts.keys()) {
-            fonts.push({ value: value.family, label: value.family });
+            fonts[value.family] = value;
         }
 
         this.setState({ fontsList: fonts });
+    }
+
+    getFontListOptions = (list) => {
+        let options = [];
+
+        for (let i in list) {
+            options.push({ value: i, label: i });
+        }
+
+        return options;
     }
 
     clearAllAddedFonts = () => {
@@ -194,7 +209,7 @@ class Main extends React.Component {
                     <Select
                         value={ this.state.fontName ? { value: this.state.fontName, label: this.state.fontName } : null }
                         onChange={ this.onChangeFont }
-                        options={ this.state.fontsList }
+                        options={ this.getFontListOptions(this.state.fontsList) }
                         styles={{
                             container: (provided, state) => ({ ...provided, width: 300, height: 30 }),
                             option: (provided, state) => ({ ...provided, color: '#000000' }),
