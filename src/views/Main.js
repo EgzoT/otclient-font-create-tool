@@ -3,7 +3,7 @@ import React from 'react';
 import InputFile from '../components/InputFile';
 import CircleAnimationButton from '../components/CircleAnimationButton-react/CircleAnimationButton';
 import IconFA from '../components/CircleAnimationButton-react/IconFA';
-import { faFileUpload, faFileImage, faFileCode, faBroom, faFolderPlus } from "@fortawesome/free-solid-svg-icons";
+import { faFileUpload, faFileImage, faFileCode, faBroom, faFolderPlus, faMagic } from "@fortawesome/free-solid-svg-icons";
 import TableWithSigns from '../components/TableWithSigns';
 import { toPng } from 'html-to-image';
 import Select from 'react-select';
@@ -26,7 +26,11 @@ class Main extends React.Component {
             signHeightError: false,
             fontWeight: 400,
             charset: charsetOptions[0],
-            spaceWidth: 3
+            spaceWidth: 3,
+            fontImageName: "new_font",
+            fontImageNameChanged: false,
+            otfontFileName: "new_font",
+            otfontFileNameChanged: false
         }
     }
 
@@ -57,6 +61,8 @@ class Main extends React.Component {
             }
 
             this.setState({ fontName: fontName });
+
+            this.createFontName();
 
             this.refreshFontList();
         }
@@ -90,6 +96,8 @@ class Main extends React.Component {
         this.refreshFontList();
 
         this.setState({ fontName: false });
+
+        this.createFontName();
     }
 
     getMinSignHeight = () => {
@@ -103,7 +111,7 @@ class Main extends React.Component {
 
         toPng(this.ref.current, { cacheBust: false, skipAutoScale: true, pixelRatio: 1, quality: 1.0 }).then((dataUrl) => {
             const link = document.createElement('a');
-            link.download = 'otc_font.png';
+            link.download = this.state.fontImageName + ".png";
             link.href = dataUrl;
             link.click();
         }).catch((err) => {
@@ -113,8 +121,8 @@ class Main extends React.Component {
 
     generateOtfontFile = () => {
         let text = "Font"
-            + "\n  name: " + "otc_font"
-            + "\n  texture: " + "otc_font"
+            + "\n  name: " + this.state.otfontFileName
+            + "\n  texture: " + this.state.fontImageName
             + "\n  height: " + this.getMinSignHeight()
             + "\n  glyph-size: " + this.state.signWidth + " " + this.state.signHeight
             + "\n  space-width: " + this.state.spaceWidth
@@ -123,18 +131,52 @@ class Main extends React.Component {
         let a = document.createElement('a');
         a.href = "data:application/octet-stream;charset=utf-8;base64," + window.btoa(unescape(encodeURIComponent(text)));
         a.textContent = 'download';
-        a.download = "otc_font" + ".otfont";
+        a.download = this.state.otfontFileName + ".otfont";
         a.click();
+    }
+
+    createFontName = () => {
+        // Delay action to wait for other setState changes, to get current data
+        setTimeout(() => {
+            let fontName = this.state.fontName ? this.state.fontName : "new_font";
+            let fontFileName = fontName + "-" + this.state.fontSize + "px" + "_" + this.state.charset.label;
+
+            if (this.state.fontImageNameChanged === true && this.state.otfontFileNameChanged === true) {
+                return;
+            } else if (this.state.fontImageNameChanged === false && this.state.otfontFileNameChanged === false) {
+                this.setState({ fontImageName: fontFileName, otfontFileName: fontFileName });
+            } else if (this.state.fontImageNameChanged === true && this.state.otfontFileNameChanged === false) {
+                this.setState({ otfontFileName: fontFileName });
+            } else if (this.state.fontImageNameChanged === false && this.state.otfontFileNameChanged === true) {
+                this.setState({ fontImageName: fontFileName });
+            }
+        }, 100);
+    }
+
+    resetFontImageNameChanged = () => {
+        this.setState({ fontImageNameChanged: false });
+
+        this.createFontName();
+    }
+
+    resetOtfontFileNameChanged = () => {
+        this.setState({ otfontFileNameChanged: false });
+
+        this.createFontName();
     }
 
     // onChange
 
     onChangeFont = (e) => {
         this.setState({ fontName: e.value });
+
+        this.createFontName();
     }
 
     onChangeFontSize = (e) => {
         this.setState({ fontSize: Number(e.target.value) });
+
+        this.createFontName();
 
         // This action run before UI change, so data from getMinSignHeight is out of date, need to delay checking action
         setTimeout(() => {
@@ -164,10 +206,20 @@ class Main extends React.Component {
 
     onChangeCharset = (e) => {
         this.setState({ charset: e });
+
+        this.createFontName();
     }
 
     onChangeSpaceWidth = (e) => {
         this.setState({ spaceWidth: Number(e.target.value) });
+    }
+
+    onChangeFontImageName = (e) => {
+        this.setState({ fontImageName: e.target.value, fontImageNameChanged: true });
+    }
+
+    onChangeOtfontFileName = (e) => {
+        this.setState({ otfontFileName: e.target.value, otfontFileNameChanged: true });
     }
 
     render() {
@@ -294,6 +346,66 @@ class Main extends React.Component {
 
                 <br/>
 
+                <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
+                    <div style={{ marginTop: "auto", marginBottom: "auto", marginRight: 5 }}>
+                        Font image name:
+                    </div>
+                    <input
+                        type="text"
+                        style={{
+                            width: 300,
+                            marginTop: "auto",
+                            marginBottom: "auto",
+                            marginRight: 10,
+                            border: this.state.fontImageNameChanged ? "3px solid #0099CC" : null
+                        }}
+                        value={ this.state.fontImageName }
+                        onChange={ this.onChangeFontImageName }
+                    />
+                    <div>
+                        <CircleAnimationButton
+                            icon={ <IconFA icon={ faMagic }/> }
+                            height={ 30 }
+                            color={ "deepSea" }
+                            text={ "Set automatically" }
+                            width={ 160 }
+                            style={{ marginTop: "auto", marginBottom: "auto" }}
+                            onClick={ this.resetFontImageNameChanged }
+                        />
+                    </div>
+                </div>
+
+                <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
+                    <div style={{ marginTop: "auto", marginBottom: "auto", marginRight: 5 }}>
+                        Otfont file name:
+                    </div>
+                    <input
+                        type="text"
+                        style={{
+                            width: 300,
+                            marginTop: "auto",
+                            marginBottom: "auto",
+                            marginRight: 10,
+                            border: this.state.otfontFileNameChanged ? "3px solid #0099CC" : null
+                        }}
+                        value={ this.state.otfontFileName }
+                        onChange={ this.onChangeOtfontFileName }
+                    />
+                    <div>
+                        <CircleAnimationButton
+                            icon={ <IconFA icon={ faMagic }/> }
+                            height={ 30 }
+                            color={ "deepSea" }
+                            text={ "Set automatically" }
+                            width={ 160 }
+                            style={{ marginTop: "auto", marginBottom: "auto" }}
+                            onClick={ this.resetOtfontFileNameChanged }
+                        />
+                    </div>
+                </div>
+
+                <br/>
+
                 <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', marginTop: 25 }}>
                     <CircleAnimationButton
                         icon={ <IconFA icon={ faFileImage }/> }
@@ -311,6 +423,8 @@ class Main extends React.Component {
                         onClick={ this.generateOtfontFile }
                     />
                 </div>
+
+                <br/>
 
                 <div style={{ width: 'fit-content', margin: 'auto' }}>
                     <TableWithSigns
