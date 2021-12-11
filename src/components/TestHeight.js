@@ -24,6 +24,7 @@ class TestHeight extends React.Component {
                     fontSize={ this.props.fontSize }
                     fontWeight={ this.props.fontWeight }
                     fontColor={ this.props.fontColor }
+                    antialiasing={ this.props.antialiasing }
                     style={{ maxHeight: 1, minHeight: 1 }}
                     cellRef={ this.ref }
                 />

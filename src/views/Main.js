@@ -32,6 +32,7 @@ class Main extends React.Component {
             otfontFileName: "new_font",
             otfontFileNameChanged: false,
             fontColor: "#FFFFFF",
+            antialiasing: true,
 
             additionalOptions: false
         }
@@ -235,6 +236,10 @@ class Main extends React.Component {
 
     onChangeFontColor = (e) => {
         this.setState({ fontColor: e.target.value });
+    }
+
+    onChangeAntialiasing = (e) => {
+        this.setState({ antialiasing: e.target.checked });
     }
 
     render() {
@@ -449,6 +454,24 @@ class Main extends React.Component {
                                 onChange={ this.onChangeFontColor }
                             />
                         </div>
+                        <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
+                            <div style={{ marginTop: "auto", marginBottom: "auto", marginRight: 5 }}>
+                                Antialiasing:
+                            </div>
+                            <input
+                                type="checkbox"
+                                style={{
+                                    marginTop: "auto",
+                                    marginBottom: "auto",
+                                    marginRight: 10
+                                }}
+                                defaultChecked={ this.state.antialiasing }
+                                onChange={ this.onChangeAntialiasing }
+                            />
+                        </div>
+                        <div style={{ fontSize: 14 }}>
+                            Experimental option, probably works only on Mac OS X/macOS, more info <a style={{ color: "#CC0033" }} href="https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth">link</a>.
+                        </div>
                     </div>
                     :
                     null
@@ -483,6 +506,7 @@ class Main extends React.Component {
                         fontWeight={ this.state.fontWeight }
                         charset={ this.state.charset.value }
                         fontColor={ this.state.fontColor }
+                        antialiasing={ this.state.antialiasing }
                         divRef={ this.ref }
                     />
                 </div>
@@ -498,6 +522,7 @@ class Main extends React.Component {
                     signHeight={ this.state.signHeight }
                     fontWeight={ this.state.fontWeight }
                     fontColor={ this.state.fontColor }
+                    antialiasing={ this.state.antialiasing }
                     style={{ margin: 'auto', width: 'fit-content' }}
                     ref={ this.testSignRef }
                 />

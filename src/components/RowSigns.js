@@ -9,7 +9,7 @@ class RowSigns extends React.Component {
         this.state = {}
     }
 
-    getCells = (fontFamily, fontSize, fontWeight, fontColor) => {
+    getCells = (fontFamily, fontSize, fontWeight, fontColor, antialiasing) => {
         let cells = [];
 
         for (let i in this.props.row) {
@@ -23,6 +23,7 @@ class RowSigns extends React.Component {
                     fontSize={ fontSize }
                     fontWeight={ fontWeight }
                     fontColor={ fontColor }
+                    antialiasing={ antialiasing }
                 />
             );
         }
@@ -42,7 +43,7 @@ class RowSigns extends React.Component {
                 border: 0,
                 overflow: "hidden"
             }}>
-                { this.getCells(this.props.fontFamily, this.props.fontSize, this.props.fontWeight, this.props.fontColor) }
+                { this.getCells(this.props.fontFamily, this.props.fontSize, this.props.fontWeight, this.props.fontColor, this.props.antialiasing) }
             </div>
         );
     }
