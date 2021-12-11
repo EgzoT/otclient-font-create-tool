@@ -7,12 +7,11 @@ class TableWithSigns extends React.Component {
         super(props);
 
         //TODO:           // Antialias ?!? https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth
-        //TODO:           // Text color
 
         this.state = {}
     }
 
-    getRows = (fontFamily, fontSize, signWidth, signHeight, fontWeight, charset) => {
+    getRows = (fontFamily, fontSize, signWidth, signHeight, fontWeight, charset, fontColor) => {
         let rows = [];
 
         for(let i in charset) {
@@ -25,6 +24,7 @@ class TableWithSigns extends React.Component {
                     fontFamily={ fontFamily }
                     fontSize={ fontSize }
                     fontWeight={ fontWeight }
+                    fontColor={ fontColor }
                 />
             );
         }
@@ -35,7 +35,7 @@ class TableWithSigns extends React.Component {
     render() {
         return (
             <div ref={ this.props.divRef } style={{ display: "table", borderSpacing: 0, position: "relative" }}>
-                { this.getRows(this.props.fontFamily, this.props.fontSize, this.props.signWidth, this.props.signHeight, this.props.fontWeight, this.props.charset) }
+                { this.getRows(this.props.fontFamily, this.props.fontSize, this.props.signWidth, this.props.signHeight, this.props.fontWeight, this.props.charset, this.props.fontColor) }
             </div>
         );
     }

@@ -21,6 +21,7 @@ class CellSign extends React.Component {
                     height: this.props.height,
                     maxHeight: this.props.height,
                     minHeight: this.props.height,
+                    color: this.props.fontColor,
                     textAlign: "left",
                     verticalAlign: "initial",
                     margin: 0,

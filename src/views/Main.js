@@ -3,7 +3,7 @@ import React from 'react';
 import InputFile from '../components/InputFile';
 import CircleAnimationButton from '../components/CircleAnimationButton-react/CircleAnimationButton';
 import IconFA from '../components/CircleAnimationButton-react/IconFA';
-import { faFileUpload, faFileImage, faFileCode, faBroom, faFolderPlus, faMagic } from "@fortawesome/free-solid-svg-icons";
+import { faFileUpload, faFileImage, faFileCode, faBroom, faFolderPlus, faMagic, faTools, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import TableWithSigns from '../components/TableWithSigns';
 import { toPng } from 'html-to-image';
 import Select from 'react-select';
@@ -30,7 +30,10 @@ class Main extends React.Component {
             fontImageName: "new_font",
             fontImageNameChanged: false,
             otfontFileName: "new_font",
-            otfontFileNameChanged: false
+            otfontFileNameChanged: false,
+            fontColor: "#FFFFFF",
+
+            additionalOptions: false
         }
     }
 
@@ -165,6 +168,14 @@ class Main extends React.Component {
         this.createFontName();
     }
 
+    openAdditionalOptions = () => {
+        this.setState({ additionalOptions: true });
+    }
+
+    closeAdditionalOptions = () => {
+        this.setState({ additionalOptions: false });
+    }
+
     // onChange
 
     onChangeFont = (e) => {
@@ -220,6 +231,10 @@ class Main extends React.Component {
 
     onChangeOtfontFileName = (e) => {
         this.setState({ otfontFileName: e.target.value, otfontFileNameChanged: true });
+    }
+
+    onChangeFontColor = (e) => {
+        this.setState({ fontColor: e.target.value });
     }
 
     render() {
@@ -406,6 +421,39 @@ class Main extends React.Component {
 
                 <br/>
 
+                <CircleAnimationButton
+                    icon={ <IconFA icon={ this.state.additionalOptions === false ? faTools : faTimesCircle }/> }
+                    alwaysVisibleText={ true }
+                    text={ this.state.additionalOptions === false ? "Open options" : "Close options" }
+                    width={ 150 }
+                    color={ this.state.additionalOptions === false ? "coralBlue" : "gray" }
+                    style={{ margin: "auto" }}
+                    onClick={ this.state.additionalOptions === false ? this.openAdditionalOptions : this.closeAdditionalOptions }
+                />
+
+                { this.state.additionalOptions === true ?
+                    <div>
+                        <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
+                            <div style={{ marginTop: "auto", marginBottom: "auto", marginRight: 5 }}>
+                                Font color:
+                            </div>
+                            <input
+                                type="color"
+                                style={{
+                                    width: 100,
+                                    marginTop: "auto",
+                                    marginBottom: "auto",
+                                    marginRight: 10
+                                }}
+                                value={ this.state.fontColor }
+                                onChange={ this.onChangeFontColor }
+                            />
+                        </div>
+                    </div>
+                    :
+                    null
+                }
+
                 <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', marginTop: 25 }}>
                     <CircleAnimationButton
                         icon={ <IconFA icon={ faFileImage }/> }
@@ -434,6 +482,7 @@ class Main extends React.Component {
                         signHeight={ this.state.signHeight }
                         fontWeight={ this.state.fontWeight }
                         charset={ this.state.charset.value }
+                        fontColor={ this.state.fontColor }
                         divRef={ this.ref }
                     />
                 </div>
@@ -448,6 +497,7 @@ class Main extends React.Component {
                     signWidth={ this.state.signWidth }
                     signHeight={ this.state.signHeight }
                     fontWeight={ this.state.fontWeight }
+                    fontColor={ this.state.fontColor }
                     style={{ margin: 'auto', width: 'fit-content' }}
                     ref={ this.testSignRef }
                 />
