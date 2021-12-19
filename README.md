@@ -2,9 +2,13 @@
 
 Application for creating fonts for OTClient
 
+## Application link
+
+[https://egzot.github.io/otclient-font-create-tool/](https://egzot.github.io/otclient-font-create-tool/)
+
 ## Instruction how to generate font and otfont files
 
-* Add font to application
+* Add font to application [example noto fonts](https://fonts.google.com/noto)
 
 * Choose one of the added font
 
@@ -45,6 +49,10 @@ Font
   glyph-size: 16 16
   space-width: 3
 ```
+
+## Examples fonts
+
+* [Noto fonts](https://fonts.google.com/noto)
 
 ## Get repository
 
