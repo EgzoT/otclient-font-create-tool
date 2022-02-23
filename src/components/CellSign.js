@@ -25,6 +25,8 @@ class CellSign extends React.Component {
                     fontSmooth: this.props.antialiasing ? "always" : "never",
                     WebkitFontSmoothing: this.props.antialiasing ? "antialiased" : "none",
                     MozOsxFontSmoothing: this.props.antialiasing ? "grayscale" : null,
+                    WebkitTextStroke: this.props.textStroke ? this.props.textStrokeSize + 'px ' + this.props.textStrokeColor : 'unset',
+                    textStroke: this.props.textStroke ? this.props.textStrokeSize + 'px ' + this.props.textStrokeColor  : 'unset',
                     textAlign: "left",
                     verticalAlign: "initial",
                     margin: 0,

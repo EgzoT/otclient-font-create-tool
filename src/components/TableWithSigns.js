@@ -9,7 +9,7 @@ class TableWithSigns extends React.Component {
         this.state = {}
     }
 
-    getRows = (fontFamily, fontSize, signWidth, signHeight, fontWeight, charset, fontColor, antialiasing) => {
+    getRows = (fontFamily, fontSize, signWidth, signHeight, fontWeight, charset, fontColor, antialiasing, textStroke, textStrokeSize, textStrokeColor) => {
         let rows = [];
 
         for(let i in charset) {
@@ -24,6 +24,9 @@ class TableWithSigns extends React.Component {
                     fontWeight={ fontWeight }
                     fontColor={ fontColor }
                     antialiasing={ antialiasing }
+                    textStroke={ textStroke }
+                    textStrokeSize={ textStrokeSize }
+                    textStrokeColor={ textStrokeColor }
                 />
             );
         }
@@ -34,7 +37,7 @@ class TableWithSigns extends React.Component {
     render() {
         return (
             <div ref={ this.props.divRef } style={{ display: "table", borderSpacing: 0, position: "relative" }}>
-                { this.getRows(this.props.fontFamily, this.props.fontSize, this.props.signWidth, this.props.signHeight, this.props.fontWeight, this.props.charset, this.props.fontColor, this.props.antialiasing) }
+                { this.getRows(this.props.fontFamily, this.props.fontSize, this.props.signWidth, this.props.signHeight, this.props.fontWeight, this.props.charset, this.props.fontColor, this.props.antialiasing, this.props.textStroke, this.props.textStrokeSize, this.props.textStrokeColor) }
             </div>
         );
     }

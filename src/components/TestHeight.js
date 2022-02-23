@@ -25,6 +25,9 @@ class TestHeight extends React.Component {
                     fontWeight={ this.props.fontWeight }
                     fontColor={ this.props.fontColor }
                     antialiasing={ this.props.antialiasing }
+                    textStroke={ this.props.textStroke }
+                    textStrokeSize={ this.props.textStrokeSize }
+                    textStrokeColor={ this.props.textStrokeColor }
                     style={{ maxHeight: 1, minHeight: 1 }}
                     cellRef={ this.ref }
                 />

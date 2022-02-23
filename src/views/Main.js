@@ -9,6 +9,7 @@ import { toPng } from 'html-to-image';
 import Select from 'react-select';
 import { charsetOptions } from '../data/consts';
 import TestHeight from '../components/TestHeight';
+import FlexContainer from '../components/FlexContainer';
 
 class Main extends React.Component {
     constructor(props) {
@@ -33,6 +34,9 @@ class Main extends React.Component {
             otfontFileNameChanged: false,
             fontColor: "#FFFFFF",
             antialiasing: true,
+            textStroke: false,
+            textStrokeSize: 0.2,
+            textStrokeColor: "#000000",
 
             additionalOptions: false
         }
@@ -244,10 +248,22 @@ class Main extends React.Component {
         this.setState({ antialiasing: e.target.checked });
     }
 
+    onChangeTextStroke = (e) => {
+        this.setState({ textStroke: e.target.checked });
+    }
+
+    onChangeTextStrokeSize = (e) => {
+        this.setState({ textStrokeSize: Number(e.target.value) });
+    }
+
+    onChangeTextStrokeColor = (e) => {
+        this.setState({ textStrokeColor: e.target.value });
+    }
+
     render() {
         return (
             <div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+                <FlexContainer style={{ marginTop: 5 }}>
                     <InputFile
                         text={ "Load font" }
                         accept={ ".ttf" }
@@ -255,7 +271,6 @@ class Main extends React.Component {
                         icon={ faFileUpload }
                         onChange={ e => this.addFont(e) }
                         width={ 120 }
-                        style={{ marginTop: 5, marginBottom: 5, marginRight: 5 }}
                     />
                     <InputFile
                         text={ "Load font from folder" }
@@ -264,22 +279,18 @@ class Main extends React.Component {
                         icon={ faFolderPlus }
                         onChange={ e => this.addFont(e) }
                         width={ 210 }
-                        style={{ marginTop: 5, marginBottom: 5, marginRight: 5 }}
                     />
                     <CircleAnimationButton
                         icon={ <IconFA icon={ faBroom }/> }
                         text={ "Delete added fonts" }
                         width={ 190 }
                         color="steelPurple"
-                        style={{ marginTop: 5, marginBottom: 5, marginRight: 5 }}
                         onClick={ this.clearAllAddedFonts }
                     />
-                </div>
+                </FlexContainer>
 
-                <br/>
-
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
-                    <div style={{ marginRight: 10 }}>Font:</div>
+                <FlexContainer>
+                    <div>Font:</div>
                     <Select
                         value={ this.state.fontName ? { value: this.state.fontName, label: this.state.fontName } : null }
                         onChange={ this.onChangeFont }
@@ -291,59 +302,70 @@ class Main extends React.Component {
                             indicatorsContainer: (provided, state) => ({ ...provided, height: 30 })
                         }}
                     />
-                </div>
+                </FlexContainer>
 
-                <br/>
+                <FlexContainer>
+                    <div>
+                        Font size:
+                    </div>
+                    <input
+                        type="number"
+                        style={{ width: 100 }}
+                        value={ this.state.fontSize }
+                        min={ 1 }
+                        onChange={ this.onChangeFontSize }
+                    />
+                </FlexContainer>
 
-                Font size:
-                <input
-                    type="number"
-                    style={{ width: 100, marginTop: 10, marginLeft: 5 }}
-                    value={ this.state.fontSize }
-                    min={ 1 }
-                    onChange={ this.onChangeFontSize }
-                />
+                <FlexContainer>
+                    <div>
+                        Sign width:
+                    </div>
+                    <input
+                        type="number"
+                        style={{ width: 100 }}
+                        value={ this.state.signWidth }
+                        min={ 1 }
+                        onChange={ this.onChangeSignWidth }
+                    />
+                </FlexContainer>
 
-                <br/>
+                <FlexContainer>
+                    <div>
+                        Sign height:
+                    </div>
+                    <input
+                        type="number"
+                        style={{
+                            width: 100,
+                            backgroundColor: this.state.signHeightError ? '#FF3366' : '#FFFFFF'
+                        }}
+                        value={ this.state.signHeight }
+                        min={ 1 }
+                        onChange={ this.onChangeSignHeight }
+                    />
+                </FlexContainer>
+                { this.state.signHeightError ? <div style={{ color: '#FF3366', marginTop: 5 }}>Real sign height is greater than the set height</div> : null }
 
-                Sign width:
-                <input
-                    type="number"
-                    style={{ width: 100, marginTop: 10, marginLeft: 5 }}
-                    value={ this.state.signWidth }
-                    min={ 1 }
-                    onChange={ this.onChangeSignWidth }
-                />
+                <FlexContainer>
+                    <div>
+                        Font weight:
+                    </div>
+                    <input
+                        type="number"
+                        style={{ width: 100 }}
+                        value={ this.state.fontWeight }
+                        step={ 100 }
+                        min={ 100 }
+                        max={ 900 }
+                        onChange={ this.onChangeFontWeight }
+                    />
+                </FlexContainer>
 
-                <br/>
-
-                Sign height:
-                <input
-                    type="number"
-                    style={{ width: 100, marginTop: 10, marginLeft: 5, backgroundColor: this.state.signHeightError ? '#FF3366' : '#FFFFFF' }}
-                    value={ this.state.signHeight }
-                    min={ 1 }
-                    onChange={ this.onChangeSignHeight }
-                />
-                { this.state.signHeightError ? <div style={{ color: '#FF3366' }}>Real sign height is greater than the set height</div> : null }
-
-                <br/>
-
-                Font weight:
-                <input
-                    type="number"
-                    style={{ width: 100, marginTop: 10, marginLeft: 5 }}
-                    value={ this.state.fontWeight }
-                    step={ 100 }
-                    min={ 100 }
-                    max={ 900 }
-                    onChange={ this.onChangeFontWeight }
-                />
-
-                <br/>
-
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
-                    <div style={{ marginRight: 10 }}>Charset:</div>
+                <FlexContainer>
+                    <div>
+                        Charset:
+                    </div>
                     <Select
                         value={ this.state.charset }
                         onChange={ this.onChangeCharset }
@@ -355,30 +377,29 @@ class Main extends React.Component {
                             indicatorsContainer: (provided, state) => ({ ...provided, height: 30 })
                         }}
                     />
-                </div>
+                </FlexContainer>
 
-                Space width:
-                <input
-                    type="number"
-                    style={{ width: 100, marginTop: 10, marginLeft: 5 }}
-                    value={ this.state.spaceWidth }
-                    min={ 1 }
-                    onChange={ this.onChangeSpaceWidth }
-                />
+                <FlexContainer>
+                    <div>
+                        Space width:
+                    </div>
+                    <input
+                        type="number"
+                        style={{ width: 100 }}
+                        value={ this.state.spaceWidth }
+                        min={ 1 }
+                        onChange={ this.onChangeSpaceWidth }
+                    />
+                </FlexContainer>
 
-                <br/>
-
-                <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
-                    <div style={{ marginTop: "auto", marginBottom: "auto", marginRight: 5 }}>
+                <FlexContainer>
+                    <div>
                         Font image name:
                     </div>
                     <input
                         type="text"
                         style={{
                             width: 300,
-                            marginTop: "auto",
-                            marginBottom: "auto",
-                            marginRight: 10,
                             border: this.state.fontImageNameChanged ? "3px solid #0099CC" : null
                         }}
                         value={ this.state.fontImageName }
@@ -390,24 +411,20 @@ class Main extends React.Component {
                             height={ 30 }
                             color={ "deepSea" }
                             text={ "Set automatically" }
-                            width={ 160 }
-                            style={{ marginTop: "auto", marginBottom: "auto" }}
+                            width={ 170 }
                             onClick={ this.resetFontImageNameChanged }
                         />
                     </div>
-                </div>
+                </FlexContainer>
 
-                <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
-                    <div style={{ marginTop: "auto", marginBottom: "auto", marginRight: 5 }}>
+                <FlexContainer>
+                    <div>
                         Otfont file name:
                     </div>
                     <input
                         type="text"
                         style={{
                             width: 300,
-                            marginTop: "auto",
-                            marginBottom: "auto",
-                            marginRight: 10,
                             border: this.state.otfontFileNameChanged ? "3px solid #0099CC" : null
                         }}
                         value={ this.state.otfontFileName }
@@ -419,12 +436,11 @@ class Main extends React.Component {
                             height={ 30 }
                             color={ "deepSea" }
                             text={ "Set automatically" }
-                            width={ 160 }
-                            style={{ marginTop: "auto", marginBottom: "auto" }}
+                            width={ 170 }
                             onClick={ this.resetOtfontFileNameChanged }
                         />
                     </div>
-                </div>
+                </FlexContainer>
 
                 <br/>
 
@@ -440,40 +456,67 @@ class Main extends React.Component {
 
                 { this.state.additionalOptions === true ?
                     <div>
-                        <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
-                            <div style={{ marginTop: "auto", marginBottom: "auto", marginRight: 5 }}>
+                        <FlexContainer>
+                            <div>
                                 Font color:
                             </div>
                             <input
                                 type="color"
-                                style={{
-                                    width: 100,
-                                    marginTop: "auto",
-                                    marginBottom: "auto",
-                                    marginRight: 10
-                                }}
+                                style={{ width: 100 }}
                                 value={ this.state.fontColor }
                                 onChange={ this.onChangeFontColor }
                             />
-                        </div>
-                        <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
-                            <div style={{ marginTop: "auto", marginBottom: "auto", marginRight: 5 }}>
+                        </FlexContainer>
+                        <FlexContainer>
+                            <div>
                                 Antialiasing:
                             </div>
                             <input
                                 type="checkbox"
-                                style={{
-                                    marginTop: "auto",
-                                    marginBottom: "auto",
-                                    marginRight: 10
-                                }}
                                 defaultChecked={ this.state.antialiasing }
                                 onChange={ this.onChangeAntialiasing }
                             />
-                        </div>
+                        </FlexContainer>
                         <div style={{ fontSize: 14 }}>
                             Experimental option, probably works only on Mac OS X/macOS, more info <a style={{ color: "#CC0033" }} href="https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth">link</a>.
                         </div>
+
+                        <FlexContainer>
+                            <div>
+                                Text stroke:
+                            </div>
+                            <input
+                                type="checkbox"
+                                defaultChecked={ this.state.textStroke }
+                                onChange={ this.onChangeTextStroke }
+                            />
+                        </FlexContainer>
+
+                        <FlexContainer>
+                            <div>
+                                Text stroke size:
+                            </div>
+                            <input
+                                type="number"
+                                style={{ width: 100 }}
+                                value={ this.state.textStrokeSize }
+                                min={ 0 }
+                                step={ 0.1 }
+                                onChange={ this.onChangeTextStrokeSize }
+                            />
+                        </FlexContainer>
+
+                        <FlexContainer>
+                            <div>
+                                Text stroke color:
+                            </div>
+                            <input
+                                type="color"
+                                style={{ width: 100 }}
+                                value={ this.state.textStrokeColor }
+                                onChange={ this.onChangeTextStrokeColor }
+                            />
+                        </FlexContainer>
                     </div>
                     :
                     null
@@ -509,6 +552,9 @@ class Main extends React.Component {
                         charset={ this.state.charset.value }
                         fontColor={ this.state.fontColor }
                         antialiasing={ this.state.antialiasing }
+                        textStroke={ this.state.textStroke }
+                        textStrokeSize={ this.state.textStrokeSize }
+                        textStrokeColor={ this.state.textStrokeColor }
                         divRef={ this.ref }
                     />
                 </div>
@@ -525,6 +571,9 @@ class Main extends React.Component {
                     fontWeight={ this.state.fontWeight }
                     fontColor={ this.state.fontColor }
                     antialiasing={ this.state.antialiasing }
+                    textStroke={ this.state.textStroke }
+                    textStrokeSize={ this.state.textStrokeSize }
+                    textStrokeColor={ this.state.textStrokeColor }
                     style={{ margin: 'auto', width: 'fit-content' }}
                     ref={ this.testSignRef }
                 />
