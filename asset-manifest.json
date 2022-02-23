@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/otclient-font-create-tool/static/css/main.9d5b29c0.chunk.css",
-    "main.js": "/otclient-font-create-tool/static/js/main.89326d45.chunk.js",
-    "main.js.map": "/otclient-font-create-tool/static/js/main.89326d45.chunk.js.map",
+    "main.js": "/otclient-font-create-tool/static/js/main.d2fe3ac4.chunk.js",
+    "main.js.map": "/otclient-font-create-tool/static/js/main.d2fe3ac4.chunk.js.map",
     "runtime-main.js": "/otclient-font-create-tool/static/js/runtime-main.560a97b7.js",
     "runtime-main.js.map": "/otclient-font-create-tool/static/js/runtime-main.560a97b7.js.map",
-    "static/js/2.6590fb05.chunk.js": "/otclient-font-create-tool/static/js/2.6590fb05.chunk.js",
-    "static/js/2.6590fb05.chunk.js.map": "/otclient-font-create-tool/static/js/2.6590fb05.chunk.js.map",
+    "static/js/2.af22036f.chunk.js": "/otclient-font-create-tool/static/js/2.af22036f.chunk.js",
+    "static/js/2.af22036f.chunk.js.map": "/otclient-font-create-tool/static/js/2.af22036f.chunk.js.map",
     "static/js/3.eeb87a59.chunk.js": "/otclient-font-create-tool/static/js/3.eeb87a59.chunk.js",
     "static/js/3.eeb87a59.chunk.js.map": "/otclient-font-create-tool/static/js/3.eeb87a59.chunk.js.map",
     "index.html": "/otclient-font-create-tool/index.html",
     "static/css/main.9d5b29c0.chunk.css.map": "/otclient-font-create-tool/static/css/main.9d5b29c0.chunk.css.map",
-    "static/js/2.6590fb05.chunk.js.LICENSE.txt": "/otclient-font-create-tool/static/js/2.6590fb05.chunk.js.LICENSE.txt"
+    "static/js/2.af22036f.chunk.js.LICENSE.txt": "/otclient-font-create-tool/static/js/2.af22036f.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.560a97b7.js",
-    "static/js/2.6590fb05.chunk.js",
+    "static/js/2.af22036f.chunk.js",
     "static/css/main.9d5b29c0.chunk.css",
-    "static/js/main.89326d45.chunk.js"
+    "static/js/main.d2fe3ac4.chunk.js"
   ]
 }
