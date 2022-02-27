@@ -9,7 +9,7 @@ class RowSigns extends React.Component {
         this.state = {}
     }
 
-    getCells = (fontFamily, fontSize, fontWeight, fontColor, antialiasing, textStroke, textStrokeSize, textStrokeColor) => {
+    getCells = (fontFamily, fontSize, fontWeight, fontColor, antialiasing, textStroke, textStrokeSize, textStrokeColor, strokeFill) => {
         let cells = [];
 
         for (let i in this.props.row) {
@@ -27,6 +27,7 @@ class RowSigns extends React.Component {
                     textStroke={ textStroke }
                     textStrokeSize={ textStrokeSize }
                     textStrokeColor={ textStrokeColor }
+                    strokeFill={ strokeFill }
                 />
             );
         }
@@ -46,7 +47,7 @@ class RowSigns extends React.Component {
                 border: 0,
                 overflow: "hidden"
             }}>
-                { this.getCells(this.props.fontFamily, this.props.fontSize, this.props.fontWeight, this.props.fontColor, this.props.antialiasing, this.props.textStroke, this.props.textStrokeSize, this.props.textStrokeColor) }
+                { this.getCells(this.props.fontFamily, this.props.fontSize, this.props.fontWeight, this.props.fontColor, this.props.antialiasing, this.props.textStroke, this.props.textStrokeSize, this.props.textStrokeColor, this.props.strokeFill) }
             </div>
         );
     }

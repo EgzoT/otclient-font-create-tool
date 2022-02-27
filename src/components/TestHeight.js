@@ -28,6 +28,7 @@ class TestHeight extends React.Component {
                     textStroke={ this.props.textStroke }
                     textStrokeSize={ this.props.textStrokeSize }
                     textStrokeColor={ this.props.textStrokeColor }
+                    strokeFill={ this.props.strokeFill }
                     style={{ maxHeight: 1, minHeight: 1 }}
                     cellRef={ this.ref }
                 />

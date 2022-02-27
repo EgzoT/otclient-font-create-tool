@@ -37,6 +37,7 @@ class Main extends React.Component {
             textStroke: false,
             textStrokeSize: 0.2,
             textStrokeColor: "#000000",
+            strokeFill: false,
 
             additionalOptions: false
         }
@@ -258,6 +259,10 @@ class Main extends React.Component {
 
     onChangeTextStrokeColor = (e) => {
         this.setState({ textStrokeColor: e.target.value });
+    }
+
+    onChangeStrokeFill = (e) => {
+        this.setState({ strokeFill: e.target.checked });
     }
 
     render() {
@@ -517,6 +522,17 @@ class Main extends React.Component {
                                 onChange={ this.onChangeTextStrokeColor }
                             />
                         </FlexContainer>
+
+                        <FlexContainer>
+                            <div>
+                                Stroke fill:
+                            </div>
+                            <input
+                                type="checkbox"
+                                defaultChecked={ this.state.strokeFill }
+                                onChange={ this.onChangeStrokeFill }
+                            />
+                        </FlexContainer>
                     </div>
                     :
                     null
@@ -555,6 +571,7 @@ class Main extends React.Component {
                         textStroke={ this.state.textStroke }
                         textStrokeSize={ this.state.textStrokeSize }
                         textStrokeColor={ this.state.textStrokeColor }
+                        strokeFill={ this.state.strokeFill }
                         divRef={ this.ref }
                     />
                 </div>
@@ -574,6 +591,7 @@ class Main extends React.Component {
                     textStroke={ this.state.textStroke }
                     textStrokeSize={ this.state.textStrokeSize }
                     textStrokeColor={ this.state.textStrokeColor }
+                    strokeFill={ this.state.strokeFill }
                     style={{ margin: 'auto', width: 'fit-content' }}
                     ref={ this.testSignRef }
                 />
