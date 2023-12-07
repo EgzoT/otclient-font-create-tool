@@ -1,8 +1,9 @@
+import React from 'react';
 import './App.css';
 
 import Main from './views/Main';
 
-const style = {
+const style: React.CSSProperties = {
   backgroundColor: "#282c34",
   minHeight: "100vh",
   display: "flex",
