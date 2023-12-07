@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  otclient-font-create-tool:
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    restart: on-failure
+    volumes:
+      - .:/otclient-font-create-tool
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
