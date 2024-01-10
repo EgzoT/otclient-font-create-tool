@@ -83,7 +83,7 @@ class Main extends React.Component {
     refreshFontList = () => {
         let fonts = {};
 
-        if (document.fonts.size > 0) {
+        if (document.fonts && document.fonts.size > 0) {
             document.fonts.forEach(function(value) {
                 fonts[value.family] = value;
             });
