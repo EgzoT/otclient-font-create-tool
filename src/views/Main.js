@@ -20,7 +20,7 @@ class Main extends React.Component {
 
         this.state = {
             fontsList: {},
-            fontName: false,
+            fontName: '',
             fontSize: 11,
             signWidth: 16,
             signHeight: 16,
@@ -150,7 +150,7 @@ class Main extends React.Component {
         // Delay action to wait for other setState changes, to get current data
         setTimeout(() => {
             let fontName = this.state.fontName ? this.state.fontName : "new_font";
-            let fontFileName = fontName + "-" + this.state.fontSize + "px" + "_" + this.state.charset.label;
+            let fontFileName = fontName + "-" + this.state.fontSize + "px_" + this.state.charset.label;
 
             if (this.state.fontImageNameChanged === true && this.state.otfontFileNameChanged === true) {
                 return;
