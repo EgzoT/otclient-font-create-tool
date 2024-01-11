@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/otclient-font-create-tool/static/css/main.f855e6bc.css",
-    "main.js": "/otclient-font-create-tool/static/js/main.516f2472.js",
+    "main.js": "/otclient-font-create-tool/static/js/main.f00c1149.js",
     "static/js/787.48bf04ff.chunk.js": "/otclient-font-create-tool/static/js/787.48bf04ff.chunk.js",
     "service-worker.js": "/otclient-font-create-tool/service-worker.js",
     "index.html": "/otclient-font-create-tool/index.html",
     "main.f855e6bc.css.map": "/otclient-font-create-tool/static/css/main.f855e6bc.css.map",
-    "main.516f2472.js.map": "/otclient-font-create-tool/static/js/main.516f2472.js.map",
+    "main.f00c1149.js.map": "/otclient-font-create-tool/static/js/main.f00c1149.js.map",
     "787.48bf04ff.chunk.js.map": "/otclient-font-create-tool/static/js/787.48bf04ff.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f855e6bc.css",
-    "static/js/main.516f2472.js"
+    "static/js/main.f00c1149.js"
   ]
 }
