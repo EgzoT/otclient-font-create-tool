@@ -8,12 +8,11 @@ import TableWithSigns from '../components/TableWithSigns';
 import { toPng } from 'html-to-image';
 import Select, { SingleValue } from 'react-select';
 import { charsetOptions } from '../data/consts';
-import TestHeight from '../components/TestHeight';
+import TestHeight, { TEST_SIGN_ID } from '../components/TestHeight';
 import FlexContainer from '../components/FlexContainer';
 
 const Main = () => {
     const ref = createRef<HTMLDivElement>();
-    const testSignRef = createRef<TestHeight>();
 
     const [fontsList, setFontsList] = useState<{ [key: string]: FontFace }>({});
     const [fontName, setFontName] = useState<string>('');
@@ -105,7 +104,12 @@ const Main = () => {
     }
 
     const getMinSignHeight = (): number => {
-        return testSignRef.current ? testSignRef.current.getHeight() : 0;
+        const element: HTMLElement | null = document.getElementById(TEST_SIGN_ID);
+        if (element !== null) {
+            return element.getBoundingClientRect().height;
+        } else {
+            return 0;
+        }
     }
 
     const download = (): void => {
@@ -587,8 +591,7 @@ const Main = () => {
             <TestHeight
                 fontFamily={ fontName }
                 fontSize={ fontSize }
-                signWidth={ signWidth }
-                signHeight={ signHeight }
+                width={ signWidth }
                 fontWeight={ fontWeight }
                 fontColor={ fontColor }
                 antialiasing={ antialiasing }
@@ -597,7 +600,6 @@ const Main = () => {
                 textStrokeColor={ textStrokeColor }
                 strokeFill={ strokeFill }
                 style={{ margin: 'auto', width: 'fit-content' }}
-                ref={ testSignRef }
             />
         </div>
     );
