@@ -1,4 +1,4 @@
-import { useState, createRef, useEffect } from 'react';
+import { useState, createRef } from 'react';
 
 import InputFile from '../components/InputFile';
 import CircleAnimationButton from '../components/CircleAnimationButton-react/CircleAnimationButton';
@@ -11,10 +11,12 @@ import { charsetOptions } from '../data/consts';
 import TestHeight, { TEST_SIGN_ID } from '../components/TestHeight';
 import FlexContainer from '../components/FlexContainer';
 
+const FONT_CREATE_NAME: string = "FontCreate";
+
 const Main = () => {
     const ref = createRef<HTMLDivElement>();
 
-    const [fontsList, setFontsList] = useState<{ [key: string]: FontFace }>({});
+    const [fontsList, setFontsList] = useState<{ [key: string]: ArrayBuffer }>({});
     const [fontName, setFontName] = useState<string>('');
     const [fontSize, setFontSize] = useState<number>(11);
     const [signWidth, setSignWidth] = useState<number>(16);
@@ -35,56 +37,33 @@ const Main = () => {
     const [strokeFill, setStrokeFill] = useState<boolean>(false);
     const [additionalOptions, setAdditionalOptions] = useState<boolean>(false);
 
-    useEffect(() => {
-        refreshFontList();
-    }, []);
-
     const addFont = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
-        let files = e.target.files;
+        let files: FileList | null = e.target.files;
 
         if (files !== null && files[0]) {
-            let fontName = "ERROR";
+            let fontName: string = "ERROR";
 
             for (let i = 0; i < files.length; i++) {
                 if (files[i].name.substr(files[i].name.length - 4) === '.ttf') {
-                    const data = await files[i].arrayBuffer();
+                    const data: ArrayBuffer = await files[i].arrayBuffer();
                     fontName = files[i].name.replace(".ttf", "");
 
-                    // When a font with the same name is exists delete it, before add new
-                    if (fontsList[fontName]) {
-                        document.fonts.delete(fontsList[fontName]);
-                    }
-
-                    let font = new FontFace(fontName, data);
-                    await font.load();
-                    document.fonts.add(font);
+                    fontsList[fontName] = data;
+                    setFontsList(fontsList);
                 }
             }
 
             setFontName(fontName);
+            replaceFont(fontName);
 
             createFontName();
-
-            refreshFontList();
         }
 
         // Clear input file value to prevent block onChange event when select same elements
         e.target.value = "";
     }
 
-    const refreshFontList = (): void => {
-        let fonts: { [key: string]: FontFace } = {};
-
-        if (document.fonts && document.fonts.size > 0) {
-            document.fonts.forEach(function(value) {
-                fonts[value.family] = value;
-            });
-        }
-
-        setFontsList(fonts);
-    }
-
-    const getFontListOptions = (list: { [key: string]: FontFace }): { value: string, label: string }[] => {
+    const getFontListOptions = (list: { [key: string]: ArrayBuffer }): { value: string, label: string }[] => {
         let options: { value: string, label: string }[] = [];
 
         for (let i in list) {
@@ -95,11 +74,8 @@ const Main = () => {
     }
 
     const clearAllAddedFonts = (): void => {
-        document.fonts.clear();
-        refreshFontList();
-
+        setFontsList({});
         setFontName('');
-
         createFontName();
     }
 
@@ -118,17 +94,17 @@ const Main = () => {
         }
 
         toPng(ref.current, { cacheBust: false, skipAutoScale: true, pixelRatio: 1, quality: 1.0 }).then((dataUrl) => {
-            const link = document.createElement('a');
+            const link: HTMLAnchorElement = document.createElement('a');
             link.download = fontImageName + ".png";
             link.href = dataUrl;
             link.click();
         }).catch((err) => {
-            console.log(err);
+            console.error(err);
         });
     }
 
     const generateOtfontFile = (): void => {
-        let text = "Font"
+        let text: string = "Font"
             + "\n  name: " + otfontFileName
             + "\n  texture: " + fontImageName
             + "\n  height: " + getMinSignHeight()
@@ -136,7 +112,7 @@ const Main = () => {
             + "\n  space-width: " + spaceWidth
             + "\n";
 
-        let a = document.createElement('a');
+        let a: HTMLAnchorElement = document.createElement('a');
         a.href = "data:application/octet-stream;charset=utf-8;base64," + window.btoa(unescape(encodeURIComponent(text)));
         a.textContent = 'download';
         a.download = otfontFileName + ".otfont";
@@ -146,8 +122,8 @@ const Main = () => {
     const createFontName = (): void => {
         // Delay action to wait for other setState changes, to get current data
         setTimeout(() => {
-            let fontNameValue = fontName ? fontName : "new_font";
-            let fontFileName = fontNameValue + "-" + fontSize + "px_" + charset.label;
+            let fontNameValue: string = fontName ? fontName : "new_font";
+            let fontFileName: string = fontNameValue + "-" + fontSize + "px_" + charset.label;
 
             if (fontImageNameChanged === true && otfontFileNameChanged === true) {
                 return;
@@ -164,14 +140,39 @@ const Main = () => {
 
     const resetFontImageNameChanged = (): void => {
         setFontImageNameChanged(false);
-
         createFontName();
     }
 
     const resetOtfontFileNameChanged = (): void => {
         setOtfontFileNameChanged(false);
-
         createFontName();
+    }
+
+    const getStyleElement = (): HTMLStyleElement => {
+        const element: HTMLElement | null = document.getElementById(FONT_CREATE_NAME);
+        if (element !== null && element instanceof HTMLStyleElement) {
+            return element;
+        } else {
+            return document.createElement('style');
+        }
+    }
+
+    const replaceFont = (name: string): void => {
+        const style: HTMLStyleElement = getStyleElement();
+        const fontData: ArrayBuffer = fontsList[name];
+        let binary: string = '';
+        const bytes: Uint8Array = new Uint8Array(fontData);
+        for (var i = 0; i < bytes.byteLength; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        style.textContent = `
+            @font-face {
+                font-family: '${ name }';
+                src: url(data:font/truetype;base64,${ btoa(binary) }) format('truetype');
+            }
+        `;
+        style.id = FONT_CREATE_NAME;
+        document.head.appendChild(style);
     }
 
     // onChange
@@ -179,14 +180,13 @@ const Main = () => {
     const onChangeFont = (e: SingleValue<{ value: string; label: string; }>): void => {
         if (e !== null) {
             setFontName(e.value);
-
+            replaceFont(e.value);
             createFontName();
         }
     }
 
     const onChangeFontSize = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setFontSize(Number(e.target.value));
-
         createFontName();
 
         // This action run before UI change, so data from getMinSignHeight is out of date, need to delay checking action
@@ -220,7 +220,6 @@ const Main = () => {
     const onChangeCharset = (e: SingleValue<{ value: number[][], label: string }>): void => {
         if (e !== null) {
             setCharset(e);
-
             createFontName();
         }
     }
